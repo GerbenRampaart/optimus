@@ -1,0 +1,7 @@
+{
+    "enabled": true,
+    "sample": "sample.json",
+    "transformer": "transformer.js",
+    "function": "myTransformer",
+    "output": "output.json"
+}
