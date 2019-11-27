@@ -35,6 +35,8 @@ export const activate = async (context: vscode.ExtensionContext) => {
 		console.log(quickPick);
 		const pick = await vscode.window.showQuickPick(quickPick);
 
+		
+
 		// Display a message box to the user
 		vscode.window.showInformationMessage(pick!);
 	});
