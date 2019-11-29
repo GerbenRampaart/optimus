@@ -1,10 +1,10 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
+import { ExtensionContext, commands, workspace, window, Uri } from 'vscode';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
-export const activate = async (context: vscode.ExtensionContext) => {
+export const activate = async (context: ExtensionContext) => {
 
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
@@ -13,13 +13,13 @@ export const activate = async (context: vscode.ExtensionContext) => {
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('extension.optimus', async () => {
+	let disposable = commands.registerCommand('extension.optimus', async () => {
 		// The code you place here will be executed every time your command is executed
 
 
 		
 
-		const optimusFiles = await vscode.workspace.findFiles("optimus.json", "node_modules");
+		const optimusFiles = await workspace.findFiles(".optimus", "node_modules");
 		/*
 		.then((val: vscode.Uri[]) => {
 			
@@ -30,15 +30,15 @@ export const activate = async (context: vscode.ExtensionContext) => {
 				
 			});
 		});*/
-		const quickPick = optimusFiles.map((u: vscode.Uri) => u.toString());
+		const quickPick = optimusFiles.map((u: Uri) => u.toString());
 		quickPick.push("new");
 		console.log(quickPick);
-		const pick = await vscode.window.showQuickPick(quickPick);
+		const pick = await window.showQuickPick(quickPick);
 
 		
 
 		// Display a message box to the user
-		vscode.window.showInformationMessage(pick!);
+		window.showInformationMessage(pick!);
 	});
 
 	context.subscriptions.push(disposable);
