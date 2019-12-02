@@ -1,6 +1,6 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { ExtensionContext, commands, window } from 'vscode';
+import { ExtensionContext, commands, window, workspace } from 'vscode';
 import { searchAndLoadAll } from './optimusConfig/loader';
 import { ConfigContext } from './optimusConfig/configContext';
 
@@ -18,7 +18,12 @@ export const activate = async (context: ExtensionContext) => {
 	let disposable = commands.registerCommand('extension.optimus', async () => {
 		// The code you place here will be executed every time your command is executed
 
-		const configFiles = await searchAndLoadAll();
+		// No folder opened
+		if (!workspace.workspaceFolders) {
+			return;
+		}
+
+		const configFiles = await searchAndLoadAll(workspace.workspaceFolders[0].uri.fsPath);
 				/*
 		.then((val: vscode.Uri[]) => {
 			
@@ -30,7 +35,7 @@ export const activate = async (context: ExtensionContext) => {
 			});
 		});*/
 		const quickPick = configFiles.map((cc: ConfigContext) => {
-			return `${cc.loadedConfig.config.name} ${cc.uri} ${cc.loadedConfig.warnings.length} warnings`;
+			return `${cc.loadedConfig.config.name} ${cc.path} ${cc.loadedConfig.warnings.length} warnings`;
 		});
 		quickPick.push("new");
 		console.log(quickPick);

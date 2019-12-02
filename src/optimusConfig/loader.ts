@@ -1,13 +1,12 @@
-import { Uri } from "vscode";
 import { safeLoad, JSON_SCHEMA, Schema, YAMLException } from "js-yaml";
 import { searchOptimusConfigs } from "./searcher";
-import { Config, LoadedConfig } from "./config";
+import { LoadedConfig } from "./config";
 import { promises } from "fs";
 import optimusSchema from "./optimus.schema.json";
 import { ConfigContext } from "./configContext";
 
-export const load = async (uri: Uri): Promise<LoadedConfig> => {
-    const fileContent = await promises.readFile(uri.fsPath, {
+export const load = async (path: string): Promise<LoadedConfig> => {
+    const fileContent = await promises.readFile(path, {
         encoding: "utf-8"
     });
 
@@ -28,14 +27,14 @@ export const load = async (uri: Uri): Promise<LoadedConfig> => {
     };
 };
 
-export const searchAndLoadAll = async (): Promise<ConfigContext[]> => {
-    const files = await searchOptimusConfigs();
+export const searchAndLoadAll = async (rootPath: string): Promise<ConfigContext[]> => {
+    const files = await searchOptimusConfigs(rootPath);
 
-    return Promise.all(files.map(async (fileUri: Uri) => {
-        const loadedConfig = await load(fileUri);
+    return Promise.all(files.map(async (path: string) => {
+        const loadedConfig = await load(path);
         return {
             loadedConfig: loadedConfig,
-            uri: fileUri
+            path: path
         };
     }));
 };

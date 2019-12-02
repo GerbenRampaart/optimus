@@ -5,7 +5,7 @@ import { sync } from "glob";
 export const searchOptimusConfigs = async (rootFolder: string): Promise<string[]> => {
     const optimusFiles = await sync(`${rootFolder}/**/${configName}!(node_modules)`);
 
-    optimusFiles.forEach((u: Uri) => {
+    optimusFiles.forEach((u: string) => {
         console.log(u.toString());
     });
 

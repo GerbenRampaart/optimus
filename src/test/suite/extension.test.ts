@@ -6,8 +6,8 @@ import * as vscode from 'vscode';
 import { readFileSync } from 'fs';
 import { Config } from "../../optimusConfig/config";
 import { safeLoad } from "js-yaml";
-import { searchOptimusConfigs } from '../../optimusConfig/searcher';
 import { path } from "app-root-path";
+import { searchAndLoadAll } from '../../optimusConfig/loader';
 // import * as myExtension from '../extension';
 
 suite('Extension Test Suite', () => {
@@ -25,7 +25,7 @@ suite('Extension Test Suite', () => {
 	});
 
 	test("Test searching and loading", async () => {
-		const configs = await searchOptimusConfigs();
+		const configs = await searchAndLoadAll(path);
 		console.log(JSON.stringify(configs));
 		assert.equal(configs.length, 1);
 	});
