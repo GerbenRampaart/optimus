@@ -1,7 +1,7 @@
-import { Config } from "./config";
+import { LoadedConfig } from "./config";
 import { Uri } from "vscode";
 
 export interface ConfigContext {
-    config: Config;
+    loadedConfig: LoadedConfig;
     uri: Uri;
 }

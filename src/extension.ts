@@ -1,6 +1,8 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { ExtensionContext, commands, workspace, window, Uri } from 'vscode';
+import { ExtensionContext, commands, window } from 'vscode';
+import { searchAndLoadAll } from './optimusConfig/loader';
+import { ConfigContext } from './optimusConfig/configContext';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -16,11 +18,8 @@ export const activate = async (context: ExtensionContext) => {
 	let disposable = commands.registerCommand('extension.optimus', async () => {
 		// The code you place here will be executed every time your command is executed
 
-
-		
-
-		const optimusFiles = await workspace.findFiles(".optimus", "node_modules");
-		/*
+		const configFiles = await searchAndLoadAll();
+				/*
 		.then((val: vscode.Uri[]) => {
 			
 			const panel = vscode.window.createWebviewPanel("test", "test", {
@@ -30,7 +29,9 @@ export const activate = async (context: ExtensionContext) => {
 				
 			});
 		});*/
-		const quickPick = optimusFiles.map((u: Uri) => u.toString());
+		const quickPick = configFiles.map((cc: ConfigContext) => {
+			return `${cc.loadedConfig.config.name} ${cc.uri} ${cc.loadedConfig.warnings.length} warnings`;
+		});
 		quickPick.push("new");
 		console.log(quickPick);
 		const pick = await window.showQuickPick(quickPick);

@@ -6,19 +6,15 @@ import * as vscode from 'vscode';
 import { readFileSync } from 'fs';
 import { Config } from "../../optimusConfig/config";
 import { safeLoad } from "js-yaml";
-
+import { searchOptimusConfigs } from '../../optimusConfig/searcher';
+import { path } from "app-root-path";
 // import * as myExtension from '../extension';
 
 suite('Extension Test Suite', () => {
 	vscode.window.showInformationMessage('Start all tests.');
 
-	test('Sample test', () => {
-		assert.equal(-1, [1, 2, 3].indexOf(5));
-		assert.equal(-1, [1, 2, 3].indexOf(0));
-	});
-
 	test("Test reading the config file", async () => {
-		const configString = readFileSync("./src/sample/optimus.yaml", "utf-8");
+		const configString = readFileSync(`${path}/src/sample/.optimus`, "utf-8");
 		const config = safeLoad(configString) as Config;
 		
 		assert.equal(config.enabled, true);
@@ -27,4 +23,11 @@ suite('Extension Test Suite', () => {
 		assert.equal(config.sample, "sample.json");
 		assert.equal(config.transformer, "transformer.js");
 	});
+
+	test("Test searching and loading", async () => {
+		const configs = await searchOptimusConfigs();
+		console.log(JSON.stringify(configs));
+		assert.equal(configs.length, 1);
+	});
+
 });
