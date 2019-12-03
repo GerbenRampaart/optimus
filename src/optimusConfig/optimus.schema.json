@@ -5,6 +5,7 @@
     "type": "object",
     "title": "The Root Schema",
     "required": [
+      "name",
       "sample",
       "transformer",
       "function"
@@ -22,7 +23,7 @@
       "name": {
         "$id": "#/properties/name",
         "type": "string",
-        "title": "The name to be displayed in the quick pick menu. Optional, if not added the uri (file path) will be displayed.",
+        "title": "The name to be displayed in the quick pick menu.",
         "default": "",
         "examples": [
           "string"

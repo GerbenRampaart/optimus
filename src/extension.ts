@@ -1,8 +1,10 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { ExtensionContext, commands, window, workspace } from 'vscode';
+import { ExtensionContext, commands, window, workspace, QuickPickItem } from 'vscode';
 import { searchAndLoadAll } from './optimusConfig/loader';
 import { ConfigContext } from './optimusConfig/configContext';
+import { ConfigQuickPickItem } from './optimusConfig/configQuickPick';
+import { writeErrors } from "./optimusConfig/errorWriter";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -17,13 +19,18 @@ export const activate = async (context: ExtensionContext) => {
 	// The commandId parameter must match the command field in package.json
 	let disposable = commands.registerCommand('extension.optimus', async () => {
 		// The code you place here will be executed every time your command is executed
-
+		console.log(workspace.workspaceFolders);
 		// No folder opened
 		if (!workspace.workspaceFolders) {
 			return;
 		}
-
+console.log(workspace.workspaceFolders[0].uri.fsPath);
 		const configFiles = await searchAndLoadAll(workspace.workspaceFolders[0].uri.fsPath);
+
+		configFiles.forEach(async (cc: ConfigContext) => {
+			await writeErrors(cc);
+		});
+
 				/*
 		.then((val: vscode.Uri[]) => {
 			
@@ -34,21 +41,42 @@ export const activate = async (context: ExtensionContext) => {
 				
 			});
 		});*/
-		const quickPick = configFiles.map((cc: ConfigContext) => {
-			return `${cc.loadedConfig.config.name} ${cc.path} ${cc.loadedConfig.warnings.length} warnings`;
-		});
-		quickPick.push("new");
-		console.log(quickPick);
-		const pick = await window.showQuickPick(quickPick);
 
+		const quickPicks: ConfigQuickPickItem[] = [];
 		
+		configFiles.forEach((cc: ConfigContext) => {
+			quickPicks.push(new ConfigQuickPickItem(cc));
+		});
 
-		// Display a message box to the user
-		window.showInformationMessage(pick!);
+		//quickPicks.push(new ConfigExampleQuickPickItem());
+
+		const quickPick = window.createQuickPick<ConfigQuickPickItem>();
+		
+		quickPick.items = quickPicks;
+		quickPick.canSelectMany = false;
+
+		const pick = await new Promise<ConfigQuickPickItem | undefined>((resolve) => {
+			quickPick.onDidChangeSelection((cqpi: ConfigQuickPickItem[]) => {
+				quickPick.hide();
+				resolve(cqpi[0]);
+			});
+			
+			quickPick.onDidHide(() => {
+				quickPick.dispose();
+				resolve(undefined);
+			});
+
+			quickPick.show();
+		});
+
+		if (pick) {
+			window.showInformationMessage(pick.label);
+		}
+		
 	});
 
 	context.subscriptions.push(disposable);
-}
+};
 
 // this method is called when your extension is deactivated
 export function deactivate() {}
