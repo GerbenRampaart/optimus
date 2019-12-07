@@ -2,22 +2,28 @@
 	"name": "optimus",
 	"displayName": "optimus",
 	"description": "Optimus provides a simple way of live transforming data format to data format",
-	"version": "0.0.1",
+	"version": "0.0.2",
+	"license": "MIT",
 	"engines": {
-		"vscode": "^1.40.0"
+		"vscode": "^1.40.2"
 	},
 	"categories": [
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.optimus"
+		"onCommand:extension.optimus.transform",
+		"onCommand:extension.optimus.example"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "extension.optimus",
-				"title": "Optimus"
+				"command": "extension.optimus.transform",
+				"title": "Optimus: Transform"
+			},
+			{
+				"command": "extension.optimus.example",
+				"title": "Optimus: Generate Example"
 			}
 		]
 	},
@@ -29,18 +35,18 @@
 		"test": "node ./out/test/runTest.js"
 	},
 	"devDependencies": {
+		"@types/app-root-path": "^1.2.4",
 		"@types/glob": "^7.1.1",
+		"@types/js-yaml": "^3.12.1",
 		"@types/mocha": "^5.2.7",
 		"@types/node": "^12.11.7",
 		"@types/vscode": "^1.40.0",
-		"@types/js-yaml": "^3.12.1",
-		"@types/app-root-path": "^1.2.4",
-		"jsonschema": "^1.2.5",
-		"glob": "^7.1.5",
 		"app-root-path": "3.0.0",
+		"glob": "^7.1.5",
+		"jsonschema": "^1.2.5",
 		"mocha": "^6.2.2",
-		"typescript": "^3.6.4",
 		"tslint": "^5.20.0",
+		"typescript": "^3.6.4",
 		"vscode-test": "^1.2.2"
 	},
 	"dependencies": {
