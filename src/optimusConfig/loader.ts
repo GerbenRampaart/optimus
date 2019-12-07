@@ -2,7 +2,7 @@ import { safeLoad } from "js-yaml";
 import { searchOptimusConfigs } from "./searcher";
 import { LoadedConfig } from "./config";
 import { promises } from "fs";
-import optimusSchema from "./optimus.schema.json";
+import optimusSchema from "./schema/optimus.schema.json";
 import { ConfigContext } from "./configContext";
 import { Validator, validate } from "jsonschema";
 

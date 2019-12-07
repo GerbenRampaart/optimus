@@ -1,6 +1,6 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { ExtensionContext, commands, window, workspace, QuickPickItem } from 'vscode';
+import { ExtensionContext, commands, window, workspace } from 'vscode';
 import { searchAndLoadAll } from './optimusConfig/loader';
 import { ConfigContext } from './optimusConfig/configContext';
 import { ConfigQuickPickItem } from './optimusConfig/configQuickPick';
@@ -10,22 +10,30 @@ import { writeErrors } from "./optimusConfig/errorWriter";
 // your extension is activated the very first time the command is executed
 export const activate = async (context: ExtensionContext) => {
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "optimus" is now active!');
+	let disposableExample = commands.registerCommand('extension.optimus.example', async () => {
+		window.showWarningMessage("example");
+		
+		
+	});
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = commands.registerCommand('extension.optimus', async () => {
-		// The code you place here will be executed every time your command is executed
-		console.log(workspace.workspaceFolders);
+	let disposableTransform = commands.registerCommand('extension.optimus.transform', async () => {
+
 		// No folder opened
 		if (!workspace.workspaceFolders) {
+			window.showWarningMessage("Optimus only works with an open folder", {
+				modal: true
+			});
 			return;
 		}
-console.log(workspace.workspaceFolders[0].uri.fsPath);
+
 		const configFiles = await searchAndLoadAll(workspace.workspaceFolders[0].uri.fsPath);
+
+		if (configFiles.length === 0) {
+			window.showWarningMessage("Optimus didn't find any config files. 'Optimus: Generate Example' will generate an example for you.", {
+				modal: true
+			});
+			return;
+		}
 
 		configFiles.forEach(async (cc: ConfigContext) => {
 			await writeErrors(cc);
@@ -70,12 +78,27 @@ console.log(workspace.workspaceFolders[0].uri.fsPath);
 		});
 
 		if (pick) {
+
+			if (pick.configContext.loadedConfig.validatorResult.errors.length > 0) {
+				const docToBeCorrected = await workspace.openTextDocument(pick.configContext.path);
+				await window.showTextDocument(docToBeCorrected);
+
+				window.showWarningMessage("Please correct any errors in this Optimus config and restart the transform with 'Optimus: Transform'", {
+					modal: true
+				});
+				return;
+			} else {
+
+
+			}
+
 			window.showInformationMessage(pick.label);
 		}
 		
 	});
 
-	context.subscriptions.push(disposable);
+	context.subscriptions.push(disposableExample);
+	context.subscriptions.push(disposableTransform);
 };
 
 // this method is called when your extension is deactivated
