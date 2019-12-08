@@ -14,26 +14,17 @@ export interface Definitions {
 }
 
 export interface Properties {
-  enabled: Enabled;
-  name: Function;
-  sample: Function;
-  transformer: Function;
-  function: Function;
+  enabled: Property;
+  name: Property;
+  sample: Property;
+  transformer: Property;
+  function: Property;
 }
 
-export interface Enabled {
-  $id: string;
-  type: string;
-  title: string;
-  default: boolean;
-  examples: boolean[];
-}
-
-export interface Function {
-  $id: string;
+export interface Property {
+  $id: string;ß
   type: string;
   title: string;
   default: string;
   examples: string[];
-  pattern: string;
 }

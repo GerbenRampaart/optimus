@@ -27,8 +27,7 @@
         "default": "",
         "examples": [
           "string"
-        ],
-        "pattern": "^(.*)$"
+        ]
       },
       "sample": {
         "$id": "#/properties/sample",
@@ -37,8 +36,7 @@
         "default": "",
         "examples": [
           "string"
-        ],
-        "pattern": "^(.*)$"
+        ]
       },
       "transformer": {
         "$id": "#/properties/transformer",
@@ -47,8 +45,7 @@
         "default": "",
         "examples": [
           "string"
-        ],
-        "pattern": "^(.*)$"
+        ]
       },
       "function": {
         "$id": "#/properties/function",
@@ -57,8 +54,7 @@
         "default": "",
         "examples": [
           "string"
-        ],
-        "pattern": "^(.*)$"
+        ]
       }
     }
   }

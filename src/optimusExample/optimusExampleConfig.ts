@@ -1,12 +1,18 @@
-import { OptimusSchema } from "../optimusConfig/schema/optimus.schema.types";
+import { optimusSchema } from "../optimusConfig/schema/optimus.schema";
+import { Properties } from "../optimusConfig/schema/optimus.schema.types";
 
 export const getOptimusExampleConfig = (): string => {
 
   let example = `
-  # Hi! Welcome to optimus. Please adjust the settings below to you liking. You can place this .optimus file into any directory you want (except for node_modules) in you workspace and optimus will find it after you run the "Optimus: Transform" command from the Command Palette. Oh, and you can have as many .optimus files in you project as you want, every transformation is different. :)
+  # Hi! Welcome to optimus. Please adjust the settings below to you liking. You can place this .optimus file into any directory you want (except for node_modules) in you workspace and optimus will find it after you run the "Optimus: Transform" command from the Command Palette. Oh, and you can have as many .optimus files in you project as you want, every transformation can be different. :)
   `;
 
+  const props: any = Object.keys(optimusSchema.properties);
 
+  props.forEach((p: string) => {
+    let prop: Properties = (<any>optimusSchema.properties)[p];
+    prop.
+  });
 
   return example;
 };
