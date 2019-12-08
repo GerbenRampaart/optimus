@@ -1,4 +1,4 @@
 import * as optimusJsonSchema from "./optimus.schema.json";
-import { OptimusSchema } from "./optimus.schema.types.js";
+import { OptimusJSONSchema } from "./optimus.schema.types";
 
-export const optimusSchema: OptimusSchema = optimusJsonSchema;
+export const optimusSchema: OptimusJSONSchema = optimusJsonSchema;

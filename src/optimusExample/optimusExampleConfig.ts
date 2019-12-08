@@ -1,5 +1,6 @@
 import { optimusSchema } from "../optimusConfig/schema/optimus.schema";
-import { Properties } from "../optimusConfig/schema/optimus.schema.types";
+import { Property } from "../optimusConfig/schema/optimus.schema.types";
+import { EOL } from "os";
 
 export const getOptimusExampleConfig = (): string => {
 
@@ -10,8 +11,11 @@ export const getOptimusExampleConfig = (): string => {
   const props: any = Object.keys(optimusSchema.properties);
 
   props.forEach((p: string) => {
-    let prop: Properties = (<any>optimusSchema.properties)[p];
-    prop.
+    let prop: Property = (<any>optimusSchema.properties)[p];
+    
+    const isRequired = 
+
+    example += `# ${prop.title}${EOL}`;
   });
 
   return example;

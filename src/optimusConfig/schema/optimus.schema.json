@@ -13,48 +13,33 @@
     "properties": {
       "enabled": {
         "$id": "#/properties/enabled",
-        "type": "boolean",
+        "type": "string",
         "title": "Determines if this transformer should show up if you run the 'Optimus' command from the quick pick menu. Defaults to true.",
-        "default": true,
-        "examples": [
-          true
-        ]
+        "default": "true"
       },
       "name": {
         "$id": "#/properties/name",
         "type": "string",
         "title": "The name to be displayed in the quick pick menu.",
-        "default": "",
-        "examples": [
-          "string"
-        ]
+        "default": "myTransformer"
       },
       "sample": {
         "$id": "#/properties/sample",
         "type": "string",
         "title": "The input sample file, can be json, xml or csv",
-        "default": "",
-        "examples": [
-          "string"
-        ]
+        "default": "sample.json"
       },
       "transformer": {
         "$id": "#/properties/transformer",
         "type": "string",
         "title": "The file containing the transformation function, can be javascript or typescript",
-        "default": "",
-        "examples": [
-          "string"
-        ]
+        "default": "transformer.js"
       },
       "function": {
         "$id": "#/properties/function",
         "type": "string",
         "title": "The function doing the transformation, must be of type 'any' or a typescript interface that complies to the file format in 'sample'",
-        "default": "",
-        "examples": [
-          "string"
-        ]
+        "default": "myTransformer"
       }
     }
   }
