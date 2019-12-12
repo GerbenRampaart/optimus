@@ -8,6 +8,7 @@ import { writeErrors } from "./optimusConfig/errorWriter";
 import { getOptimusExampleConfig } from './optimusExample/optimusExampleConfig';
 import { promises } from 'fs';
 import { join } from 'path';
+import { configName } from './optimusConfig/config';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -26,7 +27,7 @@ export const activate = async (context: ExtensionContext) => {
 		const root = workspace.workspaceFolders[0].uri.fsPath;
 
 		const example = getOptimusExampleConfig();
-		await promises.writeFile(join(root, ".optimus"), example, {
+		await promises.writeFile(join(root, configName), example, {
 			encoding: "utf8"
 		});
 	});
