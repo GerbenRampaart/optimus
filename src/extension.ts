@@ -9,22 +9,15 @@ import { getOptimusExampleConfig } from './optimusExample/optimusExampleConfig';
 import { promises } from 'fs';
 import { join } from 'path';
 import { configName } from './optimusConfig/config';
+import { checkAndGetWorkspace } from './checkAndGetWorkspace';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export const activate = async (context: ExtensionContext) => {
 
 	let disposableExample = commands.registerCommand('extension.optimus.example', async () => {
-		//window.showWarningMessage("example");
-		
-		if (!workspace.workspaceFolders) {
-			window.showWarningMessage("Optimus only works with an open folder", {
-				modal: true
-			});
-			return;
-		}
-
-		const root = workspace.workspaceFolders[0].uri.fsPath;
+		const root = checkAndGetWorkspace();
+		if (!root) { return; }
 
 		const example = getOptimusExampleConfig();
 		await promises.writeFile(join(root, configName), example, {
@@ -33,16 +26,9 @@ export const activate = async (context: ExtensionContext) => {
 	});
 
 	let disposableTransform = commands.registerCommand('extension.optimus.transform', async () => {
+		const root = checkAndGetWorkspace();
+		if (!root) { return; }
 
-		// No folder opened
-		if (!workspace.workspaceFolders) {
-			window.showWarningMessage("Optimus only works with an open folder", {
-				modal: true
-			});
-			return;
-		}
-
-		const root = workspace.workspaceFolders[0].uri.fsPath;
 		const configFiles = await searchAndLoadAll(root);
 
 		if (configFiles.length === 0) {
@@ -56,24 +42,11 @@ export const activate = async (context: ExtensionContext) => {
 			await writeErrors(cc);
 		});
 
-				/*
-		.then((val: vscode.Uri[]) => {
-			
-			const panel = vscode.window.createWebviewPanel("test", "test", {
-				viewColumn: vscode.ViewColumn.Two
-				
-			}, {
-				
-			});
-		});*/
-
 		const quickPicks: ConfigQuickPickItem[] = [];
 		
 		configFiles.forEach((cc: ConfigContext) => {
 			quickPicks.push(new ConfigQuickPickItem(cc));
 		});
-
-		//quickPicks.push(new ConfigExampleQuickPickItem());
 
 		const quickPick = window.createQuickPick<ConfigQuickPickItem>();
 		
@@ -106,6 +79,17 @@ export const activate = async (context: ExtensionContext) => {
 				return;
 			} else {
 
+				pick.configContext.loadedConfig.config!.
+								/*
+		.then((val: vscode.Uri[]) => {
+			
+			const panel = vscode.window.createWebviewPanel("test", "test", {
+				viewColumn: vscode.ViewColumn.Two
+				
+			}, {
+				
+			});
+		});*/
 
 			}
 

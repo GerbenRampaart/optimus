@@ -12,7 +12,7 @@ export const getOptimusExampleConfig = (): string => {
   props.forEach((p: string) => {
     let prop: Property = (<any>optimusSchema.properties)[p];
     
-    const isRequired = optimusSchema.required.indexOf(p) >= -1;
+    const isRequired = optimusSchema.required.indexOf(p) > -1;
 
     example += `# ${prop.title}${EOL}`;
     example += `${p}: ${prop.default} # (required: ${isRequired})${EOL}${EOL}`;
