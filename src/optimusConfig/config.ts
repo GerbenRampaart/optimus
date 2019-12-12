@@ -14,4 +14,4 @@ export interface LoadedConfig {
     validatorResult: ValidatorResult;
 }
 
-export const configName = ".optimus";
+export const configName = "optimus.yaml";

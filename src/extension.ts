@@ -5,15 +5,30 @@ import { searchAndLoadAll } from './optimusConfig/loader';
 import { ConfigContext } from './optimusConfig/configContext';
 import { ConfigQuickPickItem } from './optimusConfig/configQuickPick';
 import { writeErrors } from "./optimusConfig/errorWriter";
+import { getOptimusExampleConfig } from './optimusExample/optimusExampleConfig';
+import { promises } from 'fs';
+import { join } from 'path';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export const activate = async (context: ExtensionContext) => {
 
 	let disposableExample = commands.registerCommand('extension.optimus.example', async () => {
-		window.showWarningMessage("example");
+		//window.showWarningMessage("example");
 		
-		
+		if (!workspace.workspaceFolders) {
+			window.showWarningMessage("Optimus only works with an open folder", {
+				modal: true
+			});
+			return;
+		}
+
+		const root = workspace.workspaceFolders[0].uri.fsPath;
+
+		const example = getOptimusExampleConfig();
+		await promises.writeFile(join(root, ".optimus"), example, {
+			encoding: "utf8"
+		});
 	});
 
 	let disposableTransform = commands.registerCommand('extension.optimus.transform', async () => {
@@ -26,7 +41,8 @@ export const activate = async (context: ExtensionContext) => {
 			return;
 		}
 
-		const configFiles = await searchAndLoadAll(workspace.workspaceFolders[0].uri.fsPath);
+		const root = workspace.workspaceFolders[0].uri.fsPath;
+		const configFiles = await searchAndLoadAll(root);
 
 		if (configFiles.length === 0) {
 			window.showWarningMessage("Optimus didn't find any config files. 'Optimus: Generate Example' will generate an example for you.", {
