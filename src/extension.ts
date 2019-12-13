@@ -1,6 +1,6 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { ExtensionContext, commands, window, workspace } from 'vscode';
+import { ExtensionContext, commands, window, workspace, ViewColumn } from 'vscode';
 import { searchAndLoadAll } from './optimusConfig/loader';
 import { ConfigContext } from './optimusConfig/configContext';
 import { ConfigQuickPickItem } from './optimusConfig/configQuickPick';
@@ -20,9 +20,22 @@ export const activate = async (context: ExtensionContext) => {
 		if (!root) { return; }
 
 		const example = getOptimusExampleConfig();
-		await promises.writeFile(join(root, configName), example, {
+		const examplePath = join(root, "optimusExample");
+
+		window.showInputBox({
+			ignoreFocusOut: false,
+			password: false,
+			prompt: "What directory do you "
+		})
+
+		const path = join(root, configName);
+		
+		await promises.writeFile(join(examplePath, configName), example, {
 			encoding: "utf8"
 		});
+
+		const docToBeExamined = await workspace.openTextDocument(path);
+		await window.showTextDocument(docToBeExamined);
 	});
 
 	let disposableTransform = commands.registerCommand('extension.optimus.transform', async () => {
@@ -79,7 +92,14 @@ export const activate = async (context: ExtensionContext) => {
 				return;
 			} else {
 
-				pick.configContext.loadedConfig.config!.
+				const config = pick.configContext.loadedConfig.config!;
+				window.createWebviewPanel("test", "test", {
+					viewColumn: ViewColumn.Two
+					
+				}, {
+					
+				});
+				
 								/*
 		.then((val: vscode.Uri[]) => {
 			
