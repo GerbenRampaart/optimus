@@ -19,22 +19,37 @@ export const activate = async (context: ExtensionContext) => {
 		const root = checkAndGetWorkspace();
 		if (!root) { return; }
 
-		const example = getOptimusExampleConfig();
-		const examplePath = join(root, "optimusExample");
-
-		window.showInputBox({
+		const targetDir = await window.showInputBox({
 			ignoreFocusOut: false,
 			password: false,
-			prompt: "What directory do you "
-		})
+			prompt: "What directory do you want the example placed in?"
+		});
 
-		const path = join(root, configName);
-		
+		if (!targetDir) {
+			return;
+		}
+
+		const examplePath = join(root, targetDir);
+
+		try {
+			await promises.access(examplePath);
+
+			window.showWarningMessage(`Directory ${examplePath} already exists. Optimus wouldn't want to override your files :-(`, {
+				modal: true
+			});
+			return;
+		} catch (error) {
+			// This exception means the dir does not exist. Which is good.
+		}
+
+		const example = getOptimusExampleConfig();
+		const configPath = join(examplePath, configName);
+
 		await promises.writeFile(join(examplePath, configName), example, {
 			encoding: "utf8"
 		});
 
-		const docToBeExamined = await workspace.openTextDocument(path);
+		const docToBeExamined = await workspace.openTextDocument(configPath);
 		await window.showTextDocument(docToBeExamined);
 	});
 
@@ -56,13 +71,13 @@ export const activate = async (context: ExtensionContext) => {
 		});
 
 		const quickPicks: ConfigQuickPickItem[] = [];
-		
+
 		configFiles.forEach((cc: ConfigContext) => {
 			quickPicks.push(new ConfigQuickPickItem(cc));
 		});
 
 		const quickPick = window.createQuickPick<ConfigQuickPickItem>();
-		
+
 		quickPick.items = quickPicks;
 		quickPick.canSelectMany = false;
 
@@ -71,7 +86,7 @@ export const activate = async (context: ExtensionContext) => {
 				quickPick.hide();
 				resolve(cqpi[0]);
 			});
-			
+
 			quickPick.onDidHide(() => {
 				quickPick.dispose();
 				resolve(undefined);
@@ -95,27 +110,27 @@ export const activate = async (context: ExtensionContext) => {
 				const config = pick.configContext.loadedConfig.config!;
 				window.createWebviewPanel("test", "test", {
 					viewColumn: ViewColumn.Two
-					
+
 				}, {
-					
+
 				});
-				
-								/*
-		.then((val: vscode.Uri[]) => {
-			
-			const panel = vscode.window.createWebviewPanel("test", "test", {
-				viewColumn: vscode.ViewColumn.Two
-				
-			}, {
-				
-			});
-		});*/
+
+				/*
+	.then((val: vscode.Uri[]) => {
+		
+	const panel = vscode.window.createWebviewPanel("test", "test", {
+	viewColumn: vscode.ViewColumn.Two
+		
+	}, {
+		
+	});
+	});*/
 
 			}
 
 			window.showInformationMessage(pick.label);
 		}
-		
+
 	});
 
 	context.subscriptions.push(disposableExample);
@@ -123,4 +138,4 @@ export const activate = async (context: ExtensionContext) => {
 };
 
 // this method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }
