@@ -1,7 +1,6 @@
 import { ValidatorResult } from "jsonschema";
 
 export interface Config {
-    enabled?: boolean;
     name: string;
     sample: string;
     transformer: string;

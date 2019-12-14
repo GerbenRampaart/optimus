@@ -13,7 +13,7 @@ export const writeErrors = async (cc: ConfigContext): Promise<void> => {
     let newFileContent = cc.loadedConfig.raw;
 
     cc.loadedConfig.validatorResult.errors.forEach((err: ValidationError) => {
-        const errorString = `# ${err.message}${EOL}`;
+        const errorString = `# ${err.property} => ${err.message}${EOL}`;
 
         // Prevent writing the error twice
         if (cc.loadedConfig.raw.indexOf(errorString) === -1) {

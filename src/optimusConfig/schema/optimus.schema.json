@@ -11,12 +11,6 @@
       "function"
     ],
     "properties": {
-      "enabled": {
-        "$id": "#/properties/enabled",
-        "type": "string",
-        "title": "Determines if this transformer should show up if you run the 'Optimus' command from the quick pick menu. Defaults to true.",
-        "default": "true"
-      },
       "name": {
         "$id": "#/properties/name",
         "type": "string",

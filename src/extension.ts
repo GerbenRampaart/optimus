@@ -40,6 +40,9 @@ export const activate = async (context: ExtensionContext) => {
 			return;
 		} catch (error) {
 			// This exception means the dir does not exist. Which is good.
+			await promises.mkdir(examplePath, {
+				recursive: true
+			});
 		}
 
 		const example = getOptimusExampleConfig();

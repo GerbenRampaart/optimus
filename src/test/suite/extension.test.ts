@@ -16,7 +16,6 @@ suite('Extension Test Suite', () => {
 		const config = configs[0].loadedConfig.config;
 		
 		if (config) {
-			assert.equal(config.enabled, true);
 			assert.equal(config.function, "myTransformer");
 			assert.equal(config.name, "myTransformation");
 			assert.equal(config.sample, "sample.json");

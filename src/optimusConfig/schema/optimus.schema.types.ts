@@ -14,7 +14,6 @@ export interface Definitions {
 }
 
 export interface Properties {
-  enabled: Property;
   name: Property;
   sample: Property;
   transformer: Property;
