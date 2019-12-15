@@ -4,6 +4,8 @@ import { window, workspace } from 'vscode';
 import { configName } from "../optimusConfig/config";
 import { getOptimusExampleConfig } from "../optimusExample/optimusExampleConfig";
 import { checkAndGetWorkspace } from "../checkAndGetWorkspace";
+import * as sample from "../optimusExample/sample.json";
+import { load } from "../optimusConfig/loader";
 
 export const example = async () => {
   const root = checkAndGetWorkspace();
@@ -38,9 +40,27 @@ export const example = async () => {
   const example = getOptimusExampleConfig();
   const configPath = join(examplePath, configName);
 
-  await promises.writeFile(join(examplePath, configName), example, {
+  await promises.writeFile(configPath, example, {
     encoding: "utf8"
   });
+
+  // Re-load the example from the file
+  const loadedConfig = await load(configPath);
+
+  // Since we just generated the example ourselves we know it's valid.
+  const config = loadedConfig.config!;
+  const samplePath = join(examplePath, config.sample);
+
+  await promises.writeFile(samplePath, JSON.stringify(sample), {
+    encoding: "utf8"
+  });
+
+  const transformerPath = join(examplePath, config.transformer);
+
+  await promises.writeFile(samplePath, JSON.stringify(sample), {
+    encoding: "utf8"
+  });
+
 
   const docToBeExamined = await workspace.openTextDocument(configPath);
   await window.showTextDocument(docToBeExamined);

@@ -1,11 +1,6 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import { ExtensionContext, commands, window, workspace, ViewColumn } from 'vscode';
-import { getOptimusExampleConfig } from './optimusExample/optimusExampleConfig';
-import { promises } from 'fs';
-import { join } from 'path';
-import { configName } from './optimusConfig/config';
-import { checkAndGetWorkspace } from './checkAndGetWorkspace';
 import { transform } from './commands/transform';
 import { example } from './commands/example';
 
