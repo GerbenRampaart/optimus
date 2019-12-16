@@ -5,6 +5,7 @@ import { promises } from "fs";
 import optimusSchema from "./schema/optimus.schema.json";
 import { ConfigContext } from "./configContext";
 import { Validator, validate } from "jsonschema";
+import { dirname } from "path";
 
 export const load = async (path: string): Promise<LoadedConfig> => {
     const fileContent = await promises.readFile(path, {
@@ -35,7 +36,8 @@ export const searchAndLoadAll = async (rootPath: string): Promise<ConfigContext[
         return {
             loadedConfig: loadedConfig,
             path: path,
-            relativePath: path.substr(rootPath.length)
+            relativePath: path.substr(rootPath.length),
+            dir: dirname(path)
         };
     }));
 };

@@ -3,7 +3,10 @@ import { ConfigContext } from '../optimusConfig/configContext';
 import { ConfigQuickPickItem } from '../optimusConfig/configQuickPick';
 import { writeErrors } from "../optimusConfig/errorWriter";
 import { checkAndGetWorkspace } from '../checkAndGetWorkspace';
-import { window, workspace, ViewColumn } from 'vscode';
+import { window, workspace, ViewColumn, commands } from 'vscode';
+import { join } from 'path';
+import { EOL } from 'os';
+import { promises } from 'fs';
 
 export const transform = async () => {
   const root = checkAndGetWorkspace();
@@ -60,27 +63,46 @@ export const transform = async () => {
     } else {
 
       const config = pick.configContext.loadedConfig.config!;
-      window.createWebviewPanel("test", "test", {
+
+      const output = window.createWebviewPanel("test", "test", {
         viewColumn: ViewColumn.Two
-
-      }, {
-
       });
 
-      /*
-.then((val: vscode.Uri[]) => {
-  
-const panel = vscode.window.createWebviewPanel("test", "test", {
-viewColumn: vscode.ViewColumn.Two
-  
-}, {
-  
-});
-});*/
+      const transformerPath = join(pick.configContext.dir, config.transformer);
+      const samplePath = join(pick.configContext.dir, config.sample);
+      const sample = await promises.readFile(samplePath, {
+        encoding: "utf-8"
+      });
+
+      //const sampleJson = JSON.parse(sample);
+
+      const inputDocument = await workspace.openTextDocument(transformerPath);
+
+      const outputEditor = await window.showTextDocument(inputDocument, {
+        viewColumn: ViewColumn.One
+      });
+
+      // https://github.com/microsoft/vscode/issues/65876
+      commands.registerCommand("type", async (items: any[]) => {
+
+        let transformerTarget = outputEditor.document.getText();
+        transformerTarget += `${EOL}module.exports.___transformed = this.${config.function}(${sample});`;
+        console.log(transformerTarget);
+        let result: any = {};
+
+        try {
+          result = eval(transformerTarget);
+        } catch (error) {
+          console.error(error);
+        }
+        
+        console.log(result.___transformed);
+        output.webview.html = JSON.stringify(result.___transformed);
+        await commands.executeCommand("default:type", items);
+      });
 
     }
 
-    window.showInformationMessage(pick.label);
   }
 
 };

@@ -1,4 +1,5 @@
-[
+export const getSample = (): string => {
+    return `[
     {
         "a": "value-a-object-1",
         "b": "value-b-object-1",
@@ -14,4 +15,5 @@
         "b": "value-b-object-3",
         "c": "value-c-object-3"
     }
-]
+]`;
+};
