@@ -86,7 +86,7 @@ export const transform = async () => {
       commands.registerCommand("type", async (items: any[]) => {
 
         let transformerTarget = outputEditor.document.getText();
-        transformerTarget += `${EOL}module.exports.___transformed = this.${config.function}(${sample});`;
+        transformerTarget += `${EOL}module.exports.___transformed = ${config.function}(${sample});`;
         console.log(transformerTarget);
         let result: any = {};
 

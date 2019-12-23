@@ -1,2 +1,2 @@
 const t = require("./transformer");
-console.log(eval(t).___result);
+console.log(eval.call(this, t).___result);

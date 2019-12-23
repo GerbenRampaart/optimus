@@ -4,7 +4,8 @@ module.exports.myTransformer = (data) => {
     });
     return data;
 }
-module.exports.___result = myTransformer([
+
+module.exports.___result = this.myTransformer([
     {
         "key1": "value1"
     },
@@ -13,6 +14,22 @@ module.exports.___result = myTransformer([
     }
 ]);
 
-const ____transform = (str) => {
-    return eval(str);
-  }.call(context,somestring);
+/*
+module.exports.____transformed = function(data) {
+    return eval(`
+    module.exports.myTransformer = (${data}) => {
+        data.push({
+            "key3": "value3"
+        });
+        return data;
+    }    
+    `);
+}.call(this, [
+    {
+        "key1": "value1"
+    },
+    {
+        "key1": "value1"
+    }
+])();
+*/
